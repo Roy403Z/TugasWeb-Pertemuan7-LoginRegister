@@ -1,8 +1,8 @@
 <?php
-session_start();
 require_once 'config.php';
 
-if (isset($_SESSION['user_login'])) {
+// Jika cookie login sudah ada, langsung redirect ke dashboard
+if (isset($_COOKIE['user_login_data'])) {
     header('Location: dashboard.php');
     exit();
 }
@@ -22,11 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $user_data[0];
 
             if (password_verify($password, $user['password'])) {
-                $_SESSION['user_login'] = [
+                $session_payload = [
                     'id' => $user['id'],
                     'name' => $user['name'],
                     'email' => $user['email']
                 ];
+
+                // Simpan data login di Cookie selama 24 jam (Aman untuk Vercel Serverless)
+                setcookie('user_login_data', json_encode($session_payload), time() + 86400, "/");
 
                 header('Location: dashboard.php');
                 exit();
