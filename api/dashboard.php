@@ -1,12 +1,11 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['user_login'])) {
+// Proteksi halaman dashboard via Cookie
+if (!isset($_COOKIE['user_login_data'])) {
     header('Location: login.php');
     exit();
 }
 
-$user = $_SESSION['user_login'];
+$user = json_decode($_COOKIE['user_login_data'], true);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -29,7 +28,7 @@ $user = $_SESSION['user_login'];
             <p class="text-light lead mb-4">Selamat datang kembali, <strong><?= htmlspecialchars($user['name']); ?></strong>!</p>
 
             <div class="alert alert-success bg-dark border-success text-success p-3 rounded mb-4 text-start">
-                <i class="bi bi-shield-check me-2"></i><strong>Status Otentikasi:</strong> Sesi Anda aktif dan terverifikasi di Supabase.
+                <i class="bi bi-shield-check me-2"></i><strong>Status Otentikasi:</strong> Akses akun kamu aktif dan terverifikasi di Supabase Cloud.
             </div>
 
             <div class="card bg-dark border-0 p-4 text-start mb-4">
